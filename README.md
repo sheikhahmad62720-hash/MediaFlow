@@ -41,18 +41,84 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
-## Contributing
+## About MediaFlow
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+MediaFlow is a Laravel application that fetches and converts media from known platforms (YouTube, Vimeo, SoundCloud, Spotify, TikTok, Instagram, Dailymotion, Pexels, Pixabay, X/Twitter). It analyzes source URLs in real time using `yt-dlp`, lists available qualities (360p–4K + audio), and downloads the selected format using `yt-dlp` + `ffmpeg`.
 
-## Code of Conduct
+Only supported platforms are accepted — arbitrary URLs are rejected with HTTP 422.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Requirements
 
-## Security Vulnerabilities
+- PHP 8.4+ with `mbstring`, `pdo_sqlite`, `curl`, `fileinfo`
+- Node.js 20+ / npm
+- Composer
+- `yt-dlp` and `ffmpeg` binaries (installed below)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Setup
+
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+```
+
+### yt-dlp + ffmpeg (required for real downloads)
+
+MediaFlow does **not** commit these binaries (they are large). Install them under `tools/`:
+
+```bash
+# Option A — winget (Windows, recommended)
+winget install -e --id yt-dlp.yt-dlp -h
+winget install -e --id Gyan.FFmpeg -h
+# Place yt-dlp.exe and ffmpeg.exe under tools/ (see config/media.php for paths)
+
+# Option B — manual download
+# yt-dlp: https://github.com/yt-dlp/yt-dlp#installation
+# ffmpeg: https://www.gyan.dev/ffmpeg/builds/
+```
+
+`config/media.php` auto-resolves `yt_dlp.binary`, `yt_dlp.ffmpeg`, and `yt_dlp.socket_timeout` from environment variables; defaults point at `tools/yt-dlp.exe` and `tools/ffmpeg/ffmpeg.exe`.
+
+### Database
+
+For local development a SQLite database is used by default:
+
+```bash
+php artisan migrate:fresh --seed   # creates users, platforms, settings and an admin account
+```
+
+Seeded admin: `admin@mediaflow.app` / `admin123`.
+
+### Queue worker (required for downloads)
+
+Downloads run as queued jobs in the background so long videos (4K, multi-minute) don't hit PHP's `max_execution_time`. Start the worker:
+
+```bash
+php artisan queue:work --queue=downloads --timeout=0 --tries=3 --sleep=1
+```
+
+`MEDIA_QUEUE_DOWNLOADS=true` (the default) enables async downloads; the frontend polls `/api/downloads/{id}` until the status is `completed`, then uses the signed file URL to serve the file.
+
+### Running
+
+```bash
+php artisan serve        # API on http://localhost:8000
+npm run dev              # frontend (Vite, http://localhost:5173)
+```
+
+## Testing
+
+```bash
+php artisan test
+```
 
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## About Laravel
+
+Laravel is a web application framework with expressive, elegant syntax. We believe that development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+
+
