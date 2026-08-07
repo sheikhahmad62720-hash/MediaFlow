@@ -1,124 +1,79 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+MediaFlow — Media Downloader Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, high-performance media downloading platform built with Laravel 12, Vue 3 (Composition API), and Tailwind CSS 4. Powered by yt-dlp and ffmpeg for seamless video and audio extraction via an asynchronous background queue.
 
-## About Laravel
+Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Media Processing
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Analyze URLs instantly using real yt-dlp --dump-json metadata extraction
+Multi-quality selection (360p, 480p, 720p, 1080p, 4K, and audio-only) via custom Vue quality picker
+Real downloads via yt-dlp + ffmpeg merge (bv*[height<=H][ext=mp4]+ba[ext=m4a]) outputting clean mp4/m4a formats
+Platform allowlist validation — strictly permits supported platforms (YouTube, Vimeo, etc.) while rejecting arbitrary URLs with 422 errors
+Async Queue Architecture
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Asynchronous background worker — dispatches jobs to a dedicated `downloads` queue to eliminate HTTP timeouts
+No execution limits — CLI worker runs with max_execution_time=0, resolving 30s timeout limitations on large 4K/1440p media
+Live status polling — real-time job tracking (queued → processing → completed) over UUID-addressable endpoints
+Signed file serving — secure download delivery via downloads.file with strict attachment headers
+Admin Panel
 
-## Learning Laravel
+Admin content & media management interface
+Default Credentials: admin@mediaflow.app / admin123
+Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+PHP 8.4+ (Laravel 12 / Herd environment)
+Composer
+Node.js 20+ / npm
+yt-dlp & ffmpeg binaries installed under tools/
+Installation
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## About MediaFlow
-
-MediaFlow is a Laravel application that fetches and converts media from known platforms (YouTube, Vimeo, SoundCloud, Spotify, TikTok, Instagram, Dailymotion, Pexels, Pixabay, X/Twitter). It analyzes source URLs in real time using `yt-dlp`, lists available qualities (360p–4K + audio), and downloads the selected format using `yt-dlp` + `ffmpeg`.
-
-Only supported platforms are accepted — arbitrary URLs are rejected with HTTP 422.
-
-## Requirements
-
-- PHP 8.4+ with `mbstring`, `pdo_sqlite`, `curl`, `fileinfo`
-- Node.js 20+ / npm
-- Composer
-- `yt-dlp` and `ffmpeg` binaries (installed below)
-
-## Setup
-
-```bash
+# 1. Install PHP dependencies
 composer install
-npm install
-cp .env.example .env
+
+# 2. Environment config
+copy .env.example .env     # Windows
 php artisan key:generate
-```
 
-### yt-dlp + ffmpeg (required for real downloads)
+# 3. Install frontend dependencies
+npm install
 
-MediaFlow does **not** commit these binaries (they are large). Install them under `tools/`:
+# 4. Set up the database
+php artisan migrate --seed
 
-```bash
-# Option A — winget (Windows, recommended)
-winget install -e --id yt-dlp.yt-dlp -h
-winget install -e --id Gyan.FFmpeg -h
-# Place yt-dlp.exe and ffmpeg.exe under tools/ (see config/media.php for paths)
+# 5. Link storage for downloads
+php artisan storage:link
 
-# Option B — manual download
-# yt-dlp: https://github.com/yt-dlp/yt-dlp#installation
-# ffmpeg: https://www.gyan.dev/ffmpeg/builds/
-```
+# 6. Build assets (or use dev server)
+npm run build
 
-`config/media.php` auto-resolves `yt_dlp.binary`, `yt_dlp.ffmpeg`, and `yt_dlp.socket_timeout` from environment variables; defaults point at `tools/yt-dlp.exe` and `tools/ffmpeg/ffmpeg.exe`.
+Running locally
 
-### Database
+In three terminals:
+# Terminal 1 - Laravel App
+php artisan serve --port=8001     # 8000 may be used by another project
 
-For local development a SQLite database is used by default:
+# Terminal 2 - Vite HMR (development only)
+npm run dev
 
-```bash
-php artisan migrate:fresh --seed   # creates users, platforms, settings and an admin account
-```
-
-Seeded admin: `admin@mediaflow.app` / `admin123`.
-
-### Queue worker (required for downloads)
-
-Downloads run as queued jobs in the background so long videos (4K, multi-minute) don't hit PHP's `max_execution_time`. Start the worker:
-
-```bash
+# Terminal 3 - Queue Worker (REQUIRED for processing downloads)
 php artisan queue:work --queue=downloads --timeout=0 --tries=3 --sleep=1
-```
 
-`MEDIA_QUEUE_DOWNLOADS=true` (the default) enables async downloads; the frontend polls `/api/downloads/{id}` until the status is `completed`, then uses the signed file URL to serve the file.
+Open http://localhost:8001
+Note: dev assets are served by Vite on port 5173 via Laravel's @vite. For a production-like preview run npm run build then just php artisan serve.
 
-### Running
+## Naming conventions
+- Vue components: PascalCase (`DownloadCard.vue`)
+- Vue pages: suffixed `View.vue`
+- Composables: `use<Feature>.js`
+- Controllers: `<Model>Controller.php`
 
+## Formatting & quality
+- Backend: `./vendor/bin/pint`
+- Frontend: lint via ESLint/Prettier (add config as needed), code is manually ordered per component
+
+## Useful commands
 ```bash
-php artisan serve        # API on http://localhost:8000
-npm run dev              # frontend (Vite, http://localhost:5173)
-```
-
-## Testing
-
-```bash
-php artisan test
-```
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe that development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-
+php artisan queue:work --queue=downloads --timeout=0 --tries=3 --sleep=1   # start media processing worker
+php artisan migrate:fresh --seed                                          # reset + reseed demo data & admin
+php artisan storage:link                                                  # re-link storage if missing
