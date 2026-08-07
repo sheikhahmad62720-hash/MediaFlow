@@ -1,0 +1,57 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/forms';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Inter', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary-50: #eef4ff;
+    --color-primary-100: #dce7fe;
+    --color-primary-200: #c1d4fe;
+    --color-primary-300: #96b9fd;
+    --color-primary-400: #6494fa;
+    --color-primary-500: #3f6df6;
+    --color-primary-600: #294beb;
+    --color-primary-700: #2138d8;
+    --color-primary-800: #2130ae;
+    --color-primary-900: #212e89;
+    --color-primary-950: #182053;
+
+    --color-surface: #ffffff;
+    --color-canvas: #f7f8fb;
+    --color-ink: #0f172a;
+
+    --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 4px 16px -2px rgb(15 23 42 / 0.08);
+    --shadow-card-hover: 0 2px 4px 0 rgb(15 23 42 / 0.05), 0 12px 32px -6px rgb(15 23 42 / 0.16);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-canvas text-ink antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    .dark body {
+        @apply bg-[#0b1020] text-slate-100;
+    }
+}
+
+@layer components {
+    .container-page {
+        @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .focus-ring {
+        @apply outline-none focus-visible:ring-2 focus-visible:ring-primary-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+    }
+
+    .dark .focus-ring {
+        @apply focus-visible:ring-offset-[#0b1020];
+    }
+}

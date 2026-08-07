@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "types": ["vitest/globals"]
+    },
+    "include": ["vite.config.js", "src/**/*.ts"]
+}
