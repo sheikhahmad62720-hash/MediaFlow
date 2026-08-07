@@ -28,35 +28,36 @@ Node.js 20+ / npm
 yt-dlp & ffmpeg binaries installed under tools/
 Installation
 
-# 1. Install PHP dependencies
+## 1. Install PHP dependencies
 composer install
 
-# 2. Environment config
+## 2. Environment config
 copy .env.example .env     # Windows
 php artisan key:generate
 
-# 3. Install frontend dependencies
+## 3. Install frontend dependencies
+
 npm install
 
-# 4. Set up the database
+## 4. Set up the database
 php artisan migrate --seed
 
-# 5. Link storage for downloads
+## 5. Link storage for downloads
 php artisan storage:link
 
-# 6. Build assets (or use dev server)
+## 6. Build assets (or use dev server)
 npm run build
 
 Running locally
 
 In three terminals:
-# Terminal 1 - Laravel App
+## Terminal 1 - Laravel App
 php artisan serve --port=8001     # 8000 may be used by another project
 
-# Terminal 2 - Vite HMR (development only)
+## Terminal 2 - Vite HMR (development only)
 npm run dev
 
-# Terminal 3 - Queue Worker (REQUIRED for processing downloads)
+## Terminal 3 - Queue Worker (REQUIRED for processing downloads)
 php artisan queue:work --queue=downloads --timeout=0 --tries=3 --sleep=1
 
 Open http://localhost:8001
