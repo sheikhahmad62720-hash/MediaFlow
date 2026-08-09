@@ -27,6 +27,7 @@ export const routes: RouteRecordRaw[] = [
             { path: 'login', name: 'admin.login', component: () => import('@/views/auth/LoginView.vue'), meta: { title: 'Admin Login', guestOnly: true } },
             { path: 'dashboard', name: 'admin.dashboard', component: () => import('@/views/admin/DashboardView.vue'), meta: { title: 'Dashboard' } },
             { path: 'downloads', name: 'admin.downloads', component: () => import('@/views/admin/DownloadsView.vue'), meta: { title: 'Downloads' } },
+            { path: 'messages', name: 'admin.messages', component: () => import('@/views/admin/MessagesView.vue'), meta: { title: 'Messages' } },
             { path: 'platforms', name: 'admin.platforms', component: () => import('@/views/admin/PlatformsView.vue'), meta: { title: 'Platforms' } },
             { path: 'logs', name: 'admin.logs', component: () => import('@/views/admin/ActivityLogsView.vue'), meta: { title: 'Activity Logs' } },
             { path: 'settings', name: 'admin.settings', component: () => import('@/views/admin/SettingsView.vue'), meta: { title: 'Settings' } },

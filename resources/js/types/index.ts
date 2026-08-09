@@ -80,6 +80,18 @@ export interface ActivityLog {
     created_at: string;
 }
 
+export interface ContactMessage {
+    id: string;
+    name: string;
+    email: string;
+    subject: string | null;
+    message: string;
+    is_read: boolean;
+    ip_address: string | null;
+    user_agent: string | null;
+    created_at: string;
+}
+
 export interface PaginationMeta {
     current_page: number;
     from: number | null;

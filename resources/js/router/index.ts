@@ -37,7 +37,7 @@ export const setupRouter = (pinia: Pinia) => {
             return;
         }
 
-        if (to.meta.requiresAdmin && (!auth.isAuthenticated || !auth.isAdmin)) {
+        if (to.meta.requiresAdmin && to.name !== 'admin.login' && (!auth.isAuthenticated || !auth.isAdmin)) {
             next({ name: 'admin.login' });
             return;
         }

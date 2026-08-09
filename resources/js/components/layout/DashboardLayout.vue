@@ -36,6 +36,7 @@ const route = useRoute();
 const links = [
     { to: '/admin/dashboard', label: 'Dashboard', icon: 'home' },
     { to: '/admin/downloads', label: 'Downloads', icon: 'download' },
+    { to: '/admin/messages', label: 'Messages', icon: 'mail' },
     { to: '/admin/platforms', label: 'Platforms', icon: 'globe' },
     { to: '/admin/logs', label: 'Activity Logs', icon: 'file-text' },
     { to: '/admin/settings', label: 'Settings', icon: 'cog' },
