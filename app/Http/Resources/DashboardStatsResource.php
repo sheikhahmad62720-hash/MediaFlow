@@ -14,6 +14,11 @@ class DashboardStatsResource extends JsonResource
             'top_platforms' => $this->resource['top_platforms'],
             'storage' => $this->resource['storage'],
             'recent' => DownloadResource::collection($this->resource['recent']),
+            'messages' => [
+                'unread_count' => $this->resource['messages']['unread_count'],
+                'total' => $this->resource['messages']['total'],
+                'recent' => ContactMessageResource::collection($this->resource['messages']['recent']),
+            ],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Analytics;
 
+use App\Models\ContactMessage;
 use App\Models\Download;
 use App\Models\SupportedPlatform;
 use Illuminate\Support\Facades\DB;
@@ -18,11 +19,26 @@ class AnalyticsService
             ->limit(8)
             ->get();
 
+        $messages = $this->contactMessages();
+
         return [
             'downloads' => $downloads,
             'top_platforms' => $platforms,
             'storage' => $storage,
             'recent' => $recent,
+            'messages' => $messages,
+        ];
+    }
+
+    public function contactMessages(int $limit = 5): array
+    {
+        return [
+            'unread_count' => ContactMessage::where('is_read', false)->count(),
+            'total' => ContactMessage::count(),
+            'recent' => ContactMessage::query()
+                ->latest()
+                ->limit($limit)
+                ->get(),
         ];
     }
 

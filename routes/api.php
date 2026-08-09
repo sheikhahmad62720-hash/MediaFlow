@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ContactMessageController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DownloadController;
 use App\Http\Controllers\Api\MediaController;
@@ -45,9 +46,17 @@ Route::name('api.')->group(function (): void {
 
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
 
+    // Public contact form submission.
+    Route::post('contact', [ContactMessageController::class, 'store'])
+        ->name('contact.store')
+        ->middleware('throttle:download');
+
     // Administrator-only endpoints.
     Route::middleware(['auth:sanctum', 'admin'])->group(function (): void {
         Route::get('admin/dashboard', [DashboardController::class, 'stats'])->name('admin.dashboard');
+        Route::get('admin/contact-messages', [ContactMessageController::class, 'index'])->name('admin.contact-messages.index');
+        Route::put('admin/contact-messages/{contact_message}', [ContactMessageController::class, 'markRead'])->name('admin.contact-messages.read');
+        Route::delete('admin/contact-messages/{contact_message}', [ContactMessageController::class, 'destroy'])->name('admin.contact-messages.destroy');
         Route::get('admin/downloads', [DownloadController::class, 'index'])->name('admin.downloads.index');
         Route::get('admin/storage', [DashboardController::class, 'storage'])->name('admin.storage');
         Route::get('admin/platforms', [PlatformController::class, 'index'])->name('admin.platforms.index');
