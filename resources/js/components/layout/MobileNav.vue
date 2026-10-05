@@ -31,8 +31,9 @@
           </RouterLink>
         </nav>
 
-        <div class="mt-8">
+        <div class="mt-8 flex items-center justify-between border-t border-slate-200 pt-4 dark:border-slate-800">
           <ThemeToggle />
+          <UserMenu />
         </div>
       </div>
     </div>
@@ -44,6 +45,7 @@ import { computed } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import Logo from '@/components/layout/Logo.vue';
 import ThemeToggle from '@/components/ui/ThemeToggle.vue';
+import UserMenu from '@/components/layout/UserMenu.vue';
 import Icon from '@/components/ui/Icon.vue';
 
 const props = defineProps<{ modelValue: boolean }>();
