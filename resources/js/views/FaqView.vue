@@ -40,19 +40,24 @@
         </div>
 
         <div class="mx-auto mt-12 max-w-3xl">
-          <Card v-for="item in filteredItems" :key="item.question" :hover="false" class="mb-4">
-            <div class="flex items-start gap-4">
-              <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300">
+          <Card v-if="filteredItems.length" :hover="false" class="p-2">
+            <div v-for="item in filteredItems" :key="item.question" class="flex items-start gap-3 px-4">
+              <div class="mt-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-300">
                 <Icon :name="item.icon" :size="18" />
               </div>
-              <div class="flex-1">
-                <h3 class="font-semibold text-ink dark:text-slate-100">{{ item.question }}</h3>
-                <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              <div class="min-w-0 flex-1">
+                <Accordion :title="item.question">
                   {{ item.answer }}
-                </p>
+                </Accordion>
               </div>
             </div>
           </Card>
+
+          <div v-else class="rounded-xl border border-dashed border-slate-300 p-8 text-center dark:border-slate-700">
+            <Icon name="search" :size="28" class="mx-auto text-slate-400" />
+            <h3 class="mt-3 text-lg font-semibold text-ink dark:text-slate-100">No questions in this category</h3>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Try another category or reach out to us directly.</p>
+          </div>
 
           <div class="mt-8 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-8 text-center">
             <Icon name="mail" :size="28" class="mx-auto text-primary-500" />
@@ -72,6 +77,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import Accordion from '@/components/ui/Accordion.vue';
 import Badge from '@/components/ui/Badge.vue';
 import Button from '@/components/ui/Button.vue';
 import Card from '@/components/ui/Card.vue';

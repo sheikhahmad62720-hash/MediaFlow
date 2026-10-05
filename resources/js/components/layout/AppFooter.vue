@@ -1,17 +1,55 @@
 <template>
-  <footer class="border-t border-slate-200 dark:border-slate-800 bg-surface">
-    <div class="container-page py-10 text-sm text-slate-600 dark:text-slate-400">
-      <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-        <div class="flex items-center gap-2">
+  <footer class="border-t border-slate-200 bg-surface dark:border-slate-800 dark:bg-dark-card">
+    <div class="container-page py-12">
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Brand -->
+        <div class="lg:col-span-1">
           <Logo />
-          <span class="text-slate-500">© {{ year }} MediaFlow.</span>
+          <p class="mt-3 max-w-xs text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Fast, private media downloads from your favorite platforms — powered by a background
+            queue.
+          </p>
         </div>
-        <div class="flex flex-wrap items-center gap-4">
-          <RouterLink to="/privacy">Privacy</RouterLink>
-          <RouterLink to="/terms">Terms</RouterLink>
-          <RouterLink to="/contact">Contact</RouterLink>
-          <span class="text-slate-400">v{{ version }}</span>
+
+        <!-- Product -->
+        <div>
+          <h3 class="text-sm font-semibold text-ink dark:text-slate-100">Product</h3>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><RouterLink to="/download" class="footer-link">Downloader</RouterLink></li>
+            <li><RouterLink to="/platforms" class="footer-link">Supported platforms</RouterLink></li>
+            <li><RouterLink to="/faq" class="footer-link">FAQ</RouterLink></li>
+          </ul>
         </div>
+
+        <!-- Company -->
+        <div>
+          <h3 class="text-sm font-semibold text-ink dark:text-slate-100">Company</h3>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><RouterLink to="/about" class="footer-link">About us</RouterLink></li>
+            <li><RouterLink to="/contact" class="footer-link">Contact</RouterLink></li>
+            <li><RouterLink to="/account/downloads" class="footer-link">My downloads</RouterLink></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h3 class="text-sm font-semibold text-ink dark:text-slate-100">Legal</h3>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><RouterLink to="/privacy" class="footer-link">Privacy policy</RouterLink></li>
+            <li><RouterLink to="/terms" class="footer-link">Terms of service</RouterLink></li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400 sm:flex-row"
+      >
+        <span>© {{ year }} MediaFlow. All rights reserved.</span>
+        <span class="flex items-center gap-4">
+          <RouterLink to="/privacy" class="footer-link">Privacy</RouterLink>
+          <RouterLink to="/terms" class="footer-link">Terms</RouterLink>
+          <span class="text-slate-400 dark:text-slate-500">v{{ version }}</span>
+        </span>
       </div>
     </div>
   </footer>
@@ -19,6 +57,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { RouterLink } from 'vue-router';
 import Logo from '@/components/layout/Logo.vue';
 
 const year = computed(() => new Date().getFullYear());

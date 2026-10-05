@@ -1,6 +1,11 @@
 <template>
-  <section class="container-page flex min-h-[70vh] items-center justify-center py-12">
-    <Card variant="bordered" class="w-full max-w-md p-8">
+  <section class="relative flex min-h-[70vh] items-center justify-center overflow-hidden px-4 py-12">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-primary-400/20 blur-3xl dark:bg-primary-600/15"></div>
+      <div class="absolute -bottom-24 right-10 h-64 w-64 rounded-full bg-violet-400/20 blur-3xl dark:bg-violet-500/10"></div>
+    </div>
+
+    <Card variant="bordered" class="animate-fade-up relative w-full max-w-md p-8 shadow-card">
       <div class="mb-6 text-center">
         <Logo class="justify-center" />
         <h1 class="mt-3 text-2xl font-bold text-ink dark:text-slate-100">Welcome back</h1>
