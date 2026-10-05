@@ -6,7 +6,7 @@
         v-model="url"
         :loading="analyzing"
         :error="error ?? undefined"
-        placeholder="    Paste a media URL from YouTube, Vimeo, SoundCloud, or any direct link…"
+        placeholder="Paste a media URL from YouTube, Vimeo, SoundCloud, or any direct link…"
         @paste="onPaste"
       />
 

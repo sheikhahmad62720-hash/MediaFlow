@@ -15,7 +15,7 @@
       <div
         v-for="item in downloads"
         :key="item.id"
-        class="flex items-center gap-3 rounded-lg border border-slate-200 dark:border-slate-800 p-3"
+        class="flex items-center gap-3 rounded-lg border border-slate-200 p-3 transition-colors hover:border-primary-200 hover:bg-primary-50/40 dark:border-slate-800 dark:hover:border-primary-900/50 dark:hover:bg-primary-900/10"
       >
         <img
           v-if="item.thumbnail_url"

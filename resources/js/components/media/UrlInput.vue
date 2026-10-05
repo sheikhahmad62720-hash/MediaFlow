@@ -6,10 +6,10 @@
         :placeholder="placeholder"
         :error="error"
         type="url"
-        class="pr-12"
+        class="pl-11 pr-12"
         @keydown.enter="emit('paste', internal)"
       />
-      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
         <Icon name="link" :size="18" class="text-slate-400" />
       </div>
       <div

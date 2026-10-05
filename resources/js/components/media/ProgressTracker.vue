@@ -1,5 +1,15 @@
 <template>
-  <div v-if="download" class="rounded-lg border border-slate-200 dark:border-slate-800 p-4">
+  <div
+    v-if="download"
+    class="rounded-xl border p-4 transition-colors"
+    :class="
+      download.status === 'completed'
+        ? 'border-green-200 bg-green-50/50 dark:border-green-900/50 dark:bg-green-900/10'
+        : download.status === 'failed'
+          ? 'border-red-200 bg-red-50/50 dark:border-red-900/50 dark:bg-red-900/10'
+          : 'border-slate-200 bg-surface dark:border-slate-800 dark:bg-dark-card'
+    "
+  >
     <div class="flex items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <div :class="statusDot">
@@ -31,8 +41,8 @@
       </Button>
     </div>
 
-    <div v-if="inProgress" class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-      <div class="h-full w-3/4 animate-pulse rounded-full bg-primary-500" />
+    <div v-if="inProgress" class="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+      <div class="progress-indeterminate h-full w-1/3 rounded-full bg-gradient-to-r from-primary-500 to-primary-700" />
     </div>
   </div>
 </template>
